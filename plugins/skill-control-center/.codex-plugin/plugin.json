@@ -1,6 +1,6 @@
 {
   "name": "skill-control-center",
-  "version": "0.2.2+codex.20260820",
+  "version": "0.2.3+codex.20260821063704",
   "description": "Visualize and control instrumented Codex skill runs.",
   "author": {
     "name": "Local developer"
