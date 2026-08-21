@@ -1,0 +1,35 @@
+{
+  "name": "skill-control-center",
+  "version": "0.2.2+codex.20260820",
+  "description": "Visualize and control instrumented Codex skill runs.",
+  "author": {
+    "name": "Local developer"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skills",
+    "workflow",
+    "observability",
+    "human-in-the-loop"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Skill Control Center",
+    "shortDescription": "See skill progress and control optional work.",
+    "longDescription": "Wrap repeatable Codex workflows in explicit steps, inspect live progress, disable optional steps or tool classes, pause and resume a run, and cancel future work.",
+    "developerName": "Local developer",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Run this workflow with a live control panel.",
+      "Show my latest controlled skill run.",
+      "Create a controllable plan for this task."
+    ],
+    "brandColor": "#6D5EF7"
+  },
+  "mcpServers": "./.mcp.json"
+}
