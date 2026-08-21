@@ -56,3 +56,26 @@ test("UserPromptSubmit stays silent when automatic wrapping is disabled", async 
   assert.equal(result.stdout, "");
   fs.rmSync(dataDir, { recursive: true, force: true });
 });
+
+test("UserPromptSubmit consumes the first-run marker and requests a visual test", () => {
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "skill-control-center-first-run-data-"));
+  const markerDir = fs.mkdtempSync(path.join(os.tmpdir(), "skill-control-center-first-run-marker-"));
+  const markerPath = path.join(markerDir, "first-run.json");
+  fs.writeFileSync(markerPath, JSON.stringify({ pending: true }));
+  const result = spawnSync(process.execPath, ["scripts/hook-handler.mjs"], {
+    cwd: root,
+    env: {
+      ...process.env,
+      SKILL_CONTROL_CENTER_DATA_DIR: dataDir,
+      SKILL_CONTROL_CENTER_FIRST_RUN_MARKER: markerPath,
+    },
+    input: JSON.stringify({ hook_event_name: "UserPromptSubmit", session_id: "s4", cwd: "/tmp/first-run", prompt: "测试" }),
+    encoding: "utf8",
+  });
+  const output = JSON.parse(result.stdout);
+  assert.match(output.hookSpecificOutput.additionalContext, /first-run verification/i);
+  assert.match(output.hookSpecificOutput.additionalContext, /render the control center/i);
+  assert.equal(fs.existsSync(markerPath), false);
+  fs.rmSync(dataDir, { recursive: true, force: true });
+  fs.rmSync(markerDir, { recursive: true, force: true });
+});

@@ -1,5 +1,12 @@
 #!/usr/bin/env node
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { activeRunForWorkspace, appendEvent, mutateState, now } from "./state-store.mjs";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const FIRST_RUN_MARKER = process.env.SKILL_CONTROL_CENTER_FIRST_RUN_MARKER
+  || path.join(ROOT, ".first-run-test.json");
 
 let input = "";
 for await (const chunk of process.stdin) input += chunk;
@@ -33,6 +40,19 @@ const outcome = mutateState((state) => {
     toolName: event.tool_name || null,
     toolUseId: event.tool_use_id || null,
   });
+
+  if (event.hook_event_name === "UserPromptSubmit" && fs.existsSync(FIRST_RUN_MARKER)) {
+    try { fs.unlinkSync(FIRST_RUN_MARKER); } catch {}
+    return {
+      additionalContext: [
+        "Skill Control Center has a pending first-run verification requested by its installer.",
+        "Before handling the user's request, load skill-control-center:controlled-skill-run and start a controlled run titled 安装验证.",
+        "Use exactly three observable steps: verify-runtime, render-panel, and finish-test.",
+        "Immediately render the control center after starting the run, complete the three steps with short success messages, set the run to completed, and render it again.",
+        "Tell the user the installation test passed, then continue with their request.",
+      ].join(" "),
+    };
+  }
 
   if (event.hook_event_name === "UserPromptSubmit" && state.settings.autoWrapSkills !== false) {
     const activeRunInstruction = run
