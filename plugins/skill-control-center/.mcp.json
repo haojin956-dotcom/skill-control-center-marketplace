@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "skill-control-center": {
+      "command": "node",
+      "args": ["./scripts/server.mjs"],
+      "cwd": ".",
+      "env_vars": [
+        "CODEX_HOME",
+        "PLUGIN_DATA",
+        "CLAUDE_PLUGIN_DATA",
+        "SKILL_CONTROL_CENTER_DATA_DIR"
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "skill-control-center",
+  "version": "0.2.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check scripts/server.mjs && node --check scripts/state-store.mjs && node --check scripts/hook-handler.mjs && node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
